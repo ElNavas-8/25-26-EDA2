@@ -1,29 +1,35 @@
 public class Reto {
-
-    public static final char[] LETTERS = {'S', 'E', 'N', 'D', 'M', 'O', 'R', 'Y'};
-    
     static boolean[] used = new boolean[10];
     
-    static int[] valores = new int[256];
+    static int[] values = new int[256];
 
-    static boolean moreMoney(int indice){
+    public static final char[] LETTERS_1 = {'S', 'E', 'N', 'D', 'M', 'O', 'R', 'Y'};
+    
+    public static final char[] LETTERS_2 = {'F', 'O', 'R', 'T', 'Y', 'E', 'N', 'S', 'I', 'X'};
+    
+    public static final char[] LETTERS_3 = {'O', 'D', 'E', 'V', 'N'};
 
-        if (indice == LETTERS.length) {
-            return comprobarSuma();
+    static boolean resolve(char[] letters, int indice, int option){
+
+        if (indice == letters.length) {
+            return verifySum(option);
         }
 
-        char caracterActual = LETTERS[indice];
+        char caracterActual = letters[indice];
 
         for (int digit = 0; digit <= 9; digit++) {
-            if (digit == 0 && (caracterActual == 'S' || caracterActual == 'M')){ 
-                continue; 
+            
+            if (digit == 0) {
+                if (option == 1 && (caracterActual == 'S' || caracterActual == 'M')) continue;
+                if (option == 2 && (caracterActual == 'F' || caracterActual == 'T' || caracterActual == 'S')) continue;
+                if (option == 3 && (caracterActual == 'O' || caracterActual == 'E')) continue;
             }
 
             if (!used[digit]) {
                 used[digit] = true;
-                valores[caracterActual] = digit;
+                values[caracterActual] = digit;
                 
-                if (moreMoney(indice + 1)) {
+                if (resolve(letters, indice + 1, option)) {
                     return true;
                 }
 
@@ -34,29 +40,51 @@ public class Reto {
         return false;
     }
 
-    static boolean comprobarSuma() {
-        int send = valores['S'] * 1000 + valores['E'] * 100 + valores['N'] * 10 + valores['D'];
-        int more = valores['M'] * 1000 + valores['O'] * 100 + valores['R'] * 10 + valores['E'];
-        int money = valores['M'] * 10000 + valores['O'] * 1000 + valores['N'] * 100 + valores['E'] * 10 + valores['Y'];
+    static boolean verifySum(int option) {
+        if (option == 1) {
+            int send = values['S'] * 1000 + values['E'] * 100 + values['N'] * 10 + values['D'];
+            int more = values['M'] * 1000 + values['O'] * 100 + values['R'] * 10 + values['E'];
+            int money = values['M'] * 10000 + values['O'] * 1000 + values['N'] * 100 + values['E'] * 10 + values['Y'];
 
-        if (send + more == money) {
-            System.out.println("Encontrado:");
-            System.out.println("  " + send);
-            System.out.println("+ " + more);
-            System.out.println("-------");
-            System.out.println(" " + money);
-            return true;
+            if (send + more == money) {
+                System.out.println("Caso 1 Resuelto: " + send + " + " + more + " = " + money);
+                return true;
+            }
+        } 
+        else if (option == 2) {
+            int forty = values['F'] * 10000 + values['O'] * 1000 + values['R'] * 100 + values['T'] * 10 + values['Y'];
+            int ten = values['T'] * 100 + values['E'] * 10 + values['N'];
+            int sixty = values['S'] * 10000 + values['I'] * 1000 + values['X'] * 100 + values['T'] * 10 + values['Y'];
+
+            if (forty + ten + ten == sixty) {
+                System.out.println("Caso 2 Resuelto: " + forty + " + " + ten + " + " + ten + " = " + sixty);
+                return true;
+            }
+        } 
+        else if (option == 3) {
+            int odd = values['O'] * 100 + values['D'] * 10 + values['D'];
+            int even = values['E'] * 1000 + values['V'] * 100 + values['E'] * 10 + values['N'];
+
+            if (odd + odd == even) {
+                System.out.println("Caso 3 Resuelto: " + odd + " + " + odd + " = " + even);
+                return true;
+            }
         }
         return false;
     }
 
     public static void main(String[] args) {
         
-        System.out.println("Iniciando la búsqueda...");
+        System.out.println("Iniciando la búsqueda...\n");
 
-        if (!moreMoney(0)) {
-            System.out.println("No se encontró solución.");
-        }
+        used = new boolean[10];
+        if (!resolve(LETTERS_1, 0, 1)) System.out.println("No se encontró solución para el caso 1.");
+
+        used = new boolean[10];
+        if (!resolve(LETTERS_2, 0, 2)) System.out.println("No se encontró solución para el caso 2.");
+
+        used = new boolean[10];
+        if (!resolve(LETTERS_3, 0, 3)) System.out.println("No se encontró solución para el caso 3.");
     }
 
 }
