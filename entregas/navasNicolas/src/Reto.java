@@ -18,22 +18,22 @@ public class Reto {
         char caracterActual = letters[indice];
 
         for (int digit = 0; digit <= 9; digit++) {
-            
             if (digit == 0) {
-                if (option == 1 && (caracterActual == 'S' || caracterActual == 'M')) continue;
-                if (option == 2 && (caracterActual == 'F' || caracterActual == 'T' || caracterActual == 'S')) continue;
-                if (option == 3 && (caracterActual == 'O' || caracterActual == 'E')) continue;
-            }
+                if (!( (option == 1 && (caracterActual == 'S' || caracterActual == 'M')) ||
+                       (option == 2 && (caracterActual == 'F' || caracterActual == 'T' || caracterActual == 'S')) ||
+                       (option == 3 && (caracterActual == 'O' || caracterActual == 'E')) )) {
+                    
+                    if (!used[digit]) {
+                        used[digit] = true;
+                        values[caracterActual] = digit;
 
-            if (!used[digit]) {
-                used[digit] = true;
-                values[caracterActual] = digit;
-                
-                if (resolve(letters, indice + 1, option)) {
-                    return true;
+                        if (resolve(letters, indice + 1, option)) {
+                            return true;
+                        }
+
+                        used[digit] = false;
+                    }
                 }
-
-                used[digit] = false;
             }
         }
 
